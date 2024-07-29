@@ -1,0 +1,435 @@
+<?xml version="1.0"?>
+
+<robot name="wl_description" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:arg name="DEBUG" default="false"/>
+    <!-- <xacro:include filename="$(find wl_description)/xacro/gazebo.xacro"/> -->
+    <!-- <xacro:stairs stairs="15" xpos="0" ypos="0" zpos="0" /> -->
+
+    <!-- Rotor related joint and link is only for demonstrate location. -->
+    <!-- Actually, the rotor will rotate and the joint is not fixed. Reduction ratio should be considered. -->
+
+    <!-- Debug mode will hung up the robot, use "true" or "false" to switch it. -->
+    <xacro:if value="$(arg DEBUG)">
+        <link name="world"/>
+        <joint name="base_static_joint" type="fixed">
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <parent link="world"/>
+            <child link="base_link"/>
+        </joint>
+    </xacro:if> 
+
+   <link name="base_link">
+        <inertial>
+            <origin xyz="-0.0076 0.0067 0.123056" rpy="0 0 0" />
+            <mass value="8.8" />
+            <inertia ixx="0.326092" ixy="3.6E-05" ixz="-0.00115" iyy="0.229526" iyz="0.006798" izz="0.220537" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://wl_description/meshes/base_link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.79216 0.81961 0.93333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <!-- <geometry>
+                <mesh filename="package://wl_description/meshes/base_link.STL" />
+            </geometry> -->
+            <geometry>
+                <cylinder length="0.025" radius="0.0675"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="imu_link">
+        <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0" />
+        <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+        </inertial>
+    </link>
+
+    <joint name="imu_joint" type="fixed">
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <parent link="base_link" />
+            <child link="imu_link" />
+            <axis xyz="0 0 0" />
+    </joint>
+
+    <link name="lf0_Link">
+        <inertial>
+            <origin xyz="0.05976637 -0.00048182 0.01198236" rpy="0 0 0" />
+            <mass value="0.16" />
+            <inertia ixx="0.00006424" ixy="0.00000030" ixz="0.00012472" iyy="0.00116066" iyz="-0.00000101" izz="0.00117029" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://wl_description/meshes/lf0_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://wl_description/meshes/lf0_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lf0_Joint" type="revolute">
+        <origin xyz="0.054 0.1705 0.131" rpy="-1.5708 0 0" />
+        <parent link="base_link" />
+        <child link="lf0_Link" />
+        <axis xyz="0 0 1" />
+        <dynamics damping="0" friction="0"/>
+        <limit lower="-0.3363" upper="1.3479" effort="30" velocity="1000" />
+    </joint>
+    <link name="lf1_Link">
+        <inertial>
+            <origin xyz="-0.00032544 0.15899848 0.00798168" rpy="0 0 0" />
+            <mass value="0.36" />
+            <inertia ixx="0.01248770" ixy="-0.00000383" ixz="-0.00000106" iyy="0.00011869" iyz="0.00042404" izz="0.01251325" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://wl_description/meshes/lf1_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://wl_description/meshes/lf1_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lf1_Joint" type="revolute">
+        <origin xyz="0.15 -0.00010199 0.0205" rpy="0 0 0" />
+        <parent link="lf0_Link" />
+        <child link="lf1_Link" />
+        <axis xyz="0 0 1" />
+        <dynamics damping="0" friction="0"/>
+        <limit lower="-1.0" upper="1.25" effort="30" velocity="1000" />
+    </joint>
+    <link name="l_wheel_Link">
+        <inertial>
+            <origin xyz="-0.00004507 -0.00038447 0.02376028" rpy="0 0 0" />
+            <mass value="1.22" />
+            <inertia ixx="0.00174370" ixy="-0.00000195" ixz="-0.00000028" iyy="0.00176013" iyz="-0.00000241" izz="0.00173973" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://wl_description/meshes/l_wheel_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.03" rpy="0 0 0" />
+            <geometry>
+                <cylinder length="0.025" radius="0.0675"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="l_wheel_Joint" type="continuous">
+        <origin xyz="1.857E-05 0.25 0.0275" rpy="0 0 0" />
+        <parent link="lf1_Link" />
+        <child link="l_wheel_Link" />
+        <axis xyz="0 0 1" />
+        <dynamics damping="0" friction="0"/>
+        <limit effort="5" velocity="1000" />
+    </joint>
+    <link name="rf0_Link">
+        <inertial>
+            <origin xyz="0.05976637 -0.00048182 0.01198236" rpy="0 0 0" />
+            <mass value="0.16" />
+            <inertia ixx="0.00006424" ixy="0.00000174" ixz="0.00012472" iyy="0.00116066" iyz="-0.00000084" izz="0.00117029" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://wl_description/meshes/rf0_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://wl_description/meshes/rf0_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rf0_Joint" type="revolute">
+        <origin xyz="0.054 -0.1705 0.131" rpy="1.5708 0 0" />
+        <parent link="base_link" />
+        <child link="rf0_Link" />
+        <axis xyz="0 0 1" />
+        <dynamics damping="0" friction="0"/>
+        <limit lower="-1.3479" upper="0.3363" effort="30" velocity="1000" />
+    </joint>
+    <link name="rf1_Link">
+        <inertial>
+            <origin xyz="0.00032544 -0.15899848 0.00798168" rpy="0 0 0" />
+            <mass value="0.36" />
+            <inertia ixx="0.01248770" ixy="-0.00000553" ixz="0.00000112" iyy="0.00011869" iyz="-0.00042404" izz="0.01251325" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://wl_description/meshes/rf1_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://wl_description/meshes/rf1_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rf1_Joint" type="revolute">
+        <origin xyz="0.15 9.5536E-05 0.0205" rpy="0 0 0" />
+        <parent link="rf0_Link" />
+        <child link="rf1_Link" />
+        <axis xyz="0 0 1" />
+        <dynamics damping="0" friction="0"/>
+        <limit lower="-1.25" upper="1.0" effort="30" velocity="1000" />
+    </joint>
+    <link name="r_wheel_Link">
+        <inertial>
+            <origin xyz="0.00038403 0.00004865 0.02376028" rpy="0 0 0" />
+            <mass value="1.22" />
+            <inertia ixx="0.00176009" ixy="-0.00000211" ixz="0.00000241" iyy="0.00174374" iyz="0.00000031" izz="0.00173973" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://wl_description/meshes/r_wheel_Link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.03" rpy="0 0 0" />
+            <geometry>
+                <cylinder length="0.025" radius="0.0675"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="r_wheel_Joint" type="continuous">
+        <origin xyz="1.5909E-05 -0.25 0.0275" rpy="0 0 0" />
+        <parent link="rf1_Link" />
+        <child link="r_wheel_Link" />
+        <axis xyz="0 0 1" />
+        <dynamics damping="0" friction="0"/>
+        <limit effort="5" velocity="1000" />
+    </joint>
+
+
+    <transmission name="lf0_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lf0_Joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lf0_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="lf1_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lf1_Joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lf1_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="l_wheel_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="l_wheel_Joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="l_wheel_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+
+    <transmission name="rf0_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rf0_Joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rf0_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="rf1_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rf1_Joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rf1_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="r_wheel_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="r_wheel_Joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="r_wheel_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/wl_gazebo</robotNamespace>
+            <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+        </plugin>
+    </gazebo>
+
+    <!-- <gazebo>
+        <plugin name="3dplot" filename="libLinkPlot3DPlugin.so">
+            <frequency>10</frequency>
+            <plot>
+                <link>l_wheel_Link</link>
+                <pose>0 0 0 0 0 0</pose>
+                <material>Gazebo/Yellow</material>
+            </plot>
+        </plugin>
+    </gazebo> -->
+
+    <gazebo reference="imu_link">
+        <gravity>true</gravity>
+        <sensor name="imu_sensor" type="imu">
+            <always_on>true</always_on>
+            <update_rate>1000</update_rate>
+            <visualize>true</visualize>
+            <topic>__default_topic__</topic>
+            <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+                <topicName>trunk_imu</topicName>
+                <bodyName>imu_link</bodyName>
+                <updateRateHZ>1000.0</updateRateHZ>
+                <gaussianNoise>0.0</gaussianNoise>
+                <xyzOffset>0 0 0</xyzOffset>
+                <rpyOffset>0 0 0</rpyOffset>
+                <frameName>imu_link</frameName>
+            </plugin>
+            <pose>0 0 0 0 0 0</pose>
+        </sensor>
+    </gazebo>
+
+
+    <link name="support_link_1">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0" />
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+        </inertial>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder length="0.01" radius="0.01"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="support_link_joint_1" type="fixed">
+            <origin xyz="0.210 0.12 0.04" rpy="0 0 0" />
+            <parent link="base_link" />
+            <child link="support_link_1" />
+            <axis xyz="0 0 0" />
+    </joint>
+
+    <link name="support_link_2">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0" />
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+        </inertial>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder length="0.01" radius="0.01"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="support_link_joint_2" type="fixed">
+            <origin xyz="0.210 -0.12 0.04" rpy="0 0 0" />
+            <parent link="base_link" />
+            <child link="support_link_2" />
+            <axis xyz="0 0 0" />
+    </joint>
+
+    <link name="support_link_3">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0" />
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+        </inertial>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder length="0.01" radius="0.01"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="support_link_joint_3" type="fixed">
+            <origin xyz="-0.210 -0.12 0.04" rpy="0 0 0" />
+            <parent link="base_link" />
+            <child link="support_link_3" />
+            <axis xyz="0 0 0" />
+    </joint>
+
+    <link name="support_link_4">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="0" />
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+        </inertial>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder length="0.01" radius="0.01"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="support_link_joint_4" type="fixed">
+            <origin xyz="-0.210 0.12 0.04" rpy="0 0 0" />
+            <parent link="base_link" />
+            <child link="support_link_4" />
+            <axis xyz="0 0 0" />
+    </joint>
+    
+</robot>

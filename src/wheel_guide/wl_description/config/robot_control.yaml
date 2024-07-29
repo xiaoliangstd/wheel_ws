@@ -1,0 +1,39 @@
+wl_gazebo:
+    # Publish all joint states -----------------------------------
+    joint_state_controller:
+        type: joint_state_controller/JointStateController
+        publish_rate: 1000  
+
+    # lf0 Controllers ---------------------------------------
+    lf0_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: lf0_Joint
+        pid: {p: 100.0, i: 0.0, d: 5.0}
+
+    lf1_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: lf1_Joint
+        pid: {p: 300.0, i: 0.0, d: 8.0}
+
+    l_wheel_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: l_wheel_Joint
+        pid: {p: 300.0, i: 0.0, d: 8.0}
+
+    # rf0 Controllers ---------------------------------------
+    rf0_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: rf0_Joint
+        pid: {p: 100.0, i: 0.0, d: 5.0}
+
+    rf1_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: rf1_Joint
+        pid: {p: 300.0, i: 0.0, d: 8.0}
+
+    r_wheel_controller:
+        type: unitree_legged_control/UnitreeJointController
+        joint: r_wheel_Joint
+        pid: {p: 300.0, i: 0.0, d: 8.0}
+
+
